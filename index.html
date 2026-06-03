@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia Completo de Redes de Computadores</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap">
+<style>
+/* ── RESET & BASE ── */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:#0f1117;color:#e2e8f0;line-height:1.65;min-height:100vh}
+code,pre,.code-block{font-family:'IBM Plex Mono',monospace}
+
+/* ── SIDEBAR LAYOUT ── */
+.app{display:flex;min-height:100vh}
+.sidebar{
+  width:240px;min-width:240px;background:#0a0c12;border-right:1px solid #1e2433;
+  padding:0;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0;
+}
+.sidebar-logo{
+  padding:1.5rem 1.25rem 1rem;border-bottom:1px solid #1e2433;
+  font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#64748b;
+}
+.sidebar-logo span{color:#38bdf8;font-size:16px;font-weight:600;display:block;margin-bottom:2px;letter-spacing:0}
+.nav-group{padding:.75rem 0}
+.nav-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#475569;padding:.25rem 1.25rem .5rem}
+.nav-item{
+  display:flex;align-items:center;gap:9px;padding:.5rem 1.25rem;cursor:pointer;
+  font-size:13.5px;color:#94a3b8;transition:all .15s;border-left:2px solid transparent;
+}
+.nav-item:hover{color:#e2e8f0;background:#111827}
+.nav-item.active{color:#38bdf8;background:#0c1929;border-left-color:#38bdf8}
+.nav-item .dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+/* ── MAIN ── */
+.main{flex:1;padding:2rem 2.5rem;max-width:860px}
+@media(max-width:900px){
+  .app{flex-direction:column}
+  .sidebar{width:100%;height:auto;position:relative;display:flex;flex-wrap:wrap;border-right:none;border-bottom:1px solid #1e2433}
+  .sidebar-logo{width:100%;border-bottom:none}
+  .nav-group{display:flex;flex-wrap:wrap;gap:4px;padding:.5rem .75rem}
+  .nav-label{display:none}
+  .nav-item{border-radius:20px;border-left:none;padding:.4rem .9rem;font-size:12px;background:#111827}
+  .nav-item.active{background:#0c1929}
+  .main{padding:1.25rem}
+}
+
+/* ── PAGES ── */
+.page{display:none}
+.page.on{display:block}
+
+/* ── PAGE HEADER ── */
+.page-header{margin-bottom:1.75rem}
+.page-tag{display:inline-block;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.6rem}
+.page-title{font-size:1.6rem;font-weight:600;color:#f1f5f9;line-height:1.25}
+.page-desc{font-size:14px;color:#64748b;margin-top:.35rem}
+
+/* ── CARDS ── */
+.card{background:#13161f;border:1px solid #1e2433;border-radius:10px;padding:1.2rem 1.3rem;margin-bottom:1rem}
+.card-title{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#64748b;margin-bottom:.65rem}
+.prose{font-size:14.5px;color:#cbd5e1;line-height:1.75;margin-bottom:.65rem}
+.prose:last-child{margin-bottom:0}
+.prose strong{color:#f1f5f9;font-weight:500}
+
+/* ── CODE ── */
+.code-block{
+  background:#070a0f;border:1px solid #1e2433;border-radius:8px;
+  padding:.9rem 1.1rem;margin:.6rem 0;font-size:13px;color:#7dd3fc;
+  line-height:1.8;overflow-x:auto;
+}
+.code-block .cm{color:#475569}
+
+/* ── TABLES ── */
+.table-wrap{overflow-x:auto;margin:.4rem 0}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{background:#0a0c12;color:#94a3b8;font-weight:500;padding:9px 12px;text-align:left;border-bottom:1px solid #1e2433}
+td{padding:9px 12px;border-bottom:1px solid #161b27;color:#cbd5e1;vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#0d1018}
+
+/* ── TWO-COL ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1rem}
+@media(max-width:600px){.two-col{grid-template-columns:1fr}}
+.compare-card{background:#13161f;border:1px solid #1e2433;border-radius:10px;padding:1rem 1.1rem}
+.compare-title{font-size:13px;font-weight:600;color:#f1f5f9;margin-bottom:.5rem}
+.compare-body{font-size:13.5px;color:#94a3b8;line-height:1.65}
+
+/* ── TAGS / PILLS ── */
+.tag,.pill{display:inline-block;padding:2px 9px;border-radius:4px;font-size:11.5px;font-weight:600;margin-right:4px}
+.blue{background:#0c1929;color:#38bdf8;border:1px solid #0e4a7a}
+.teal{background:#071a14;color:#34d399;border:1px solid #064e3b}
+.amber{background:#1c1203;color:#fbbf24;border:1px solid #78350f}
+.coral{background:#1c0808;color:#f87171;border:1px solid #7f1d1d}
+.green{background:#0a1f0a;color:#86efac;border:1px solid #14532d}
+.purple{background:#120c2a;color:#c084fc;border:1px solid #581c87}
+
+/* ── STEPS ── */
+.step{display:flex;gap:12px;margin-bottom:.85rem;align-items:flex-start}
+.step-num{min-width:26px;height:26px;border-radius:6px;background:#0c1929;border:1px solid #0e4a7a;color:#38bdf8;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;margin-top:1px}
+.step-text{font-size:14px;color:#cbd5e1;line-height:1.65}
+
+/* ── DIVIDER ── */
+hr.div{border:none;border-top:1px solid #1e2433;margin:1.5rem 0}
+
+/* ── SECTION HEAD ── */
+.sh{font-size:15px;font-weight:600;color:#f1f5f9;margin:1.75rem 0 .75rem;padding-left:.75rem;border-left:3px solid #38bdf8}
+
+/* ── CALLOUT ── */
+.callout{border-radius:8px;padding:.85rem 1.1rem;margin-bottom:.9rem;font-size:13.5px;line-height:1.65}
+.callout.info{background:#0c1929;border:1px solid #0e4a7a;color:#7dd3fc}
+.callout.warn{background:#1c1203;border:1px solid #78350f;color:#fcd34d}
+.callout.ok{background:#071a14;border:1px solid #064e3b;color:#6ee7b7}
+
+/* ── QUIZ ── */
+.score-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.2rem}
+.metric{flex:1;min-width:90px;background:#13161f;border:1px solid #1e2433;border-radius:8px;padding:.8rem 1rem}
+.metric-label{font-size:11px;color:#64748b;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+.metric-val{font-size:24px;font-weight:600;color:#f1f5f9}
+.q-block{background:#13161f;border:1px solid #1e2433;border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:1rem}
+.q-block-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:.9rem}
+.q-item{border-bottom:1px solid #1e2433;padding-bottom:1.2rem;margin-bottom:1.2rem}
+.q-item:last-child{border-bottom:none;padding-bottom:0;margin-bottom:0}
+.q-num{font-size:11px;color:#475569;margin-bottom:.3rem;font-weight:600;letter-spacing:.04em}
+.q-text{font-size:14px;color:#e2e8f0;line-height:1.6;margin-bottom:.75rem}
+.q-opts label{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;color:#94a3b8;margin-bottom:.45rem;cursor:pointer;line-height:1.5}
+.q-opts input[type=radio]{margin-top:2px;flex-shrink:0;accent-color:#38bdf8}
+.reveal-btn{margin-top:.7rem;padding:6px 16px;border-radius:6px;border:1px solid #0e4a7a;background:#0c1929;color:#38bdf8;cursor:pointer;font-size:13px;transition:all .15s}
+.reveal-btn:hover{background:#0e1e36}
+.answer{display:none;margin-top:.7rem;padding:.8rem 1rem;border-radius:7px;font-size:13.5px;line-height:1.65}
+.answer.show{display:block}
+.answer.correct{background:#071a14;border:1px solid #064e3b;color:#6ee7b7}
+.answer.wrong{background:#1c0808;border:1px solid #7f1d1d;color:#fca5a5}
+.answer.neutral{background:#0c1929;border:1px solid #0e4a7a;color:#7dd3fc}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span>Redes de Computadores</span>
+    Guia Completo de Estudos
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">Fundamentos</div>
+    <div class="nav-item active" onclick="nav('ipv4',this)"><span class="dot"></span>Endereçamento IPv4</div>
+    <div class="nav-item" onclick="nav('dispositivos',this)"><span class="dot"></span>Hub, Switch e Roteador</div>
+    <div class="nav-item" onclick="nav('dominios',this)"><span class="dot"></span>Domínios de Colisão e Broadcast</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">Configuração</div>
+    <div class="nav-item" onclick="nav('switch-config',this)"><span class="dot"></span>Configuração de Switch</div>
+    <div class="nav-item" onclick="nav('router-config',this)"><span class="dot"></span>Configuração de Roteador</div>
+    <div class="nav-item" onclick="nav('estatico',this)"><span class="dot"></span>Roteamento Estático</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">Protocolos Dinâmicos</div>
+    <div class="nav-item" onclick="nav('rip',this)"><span class="dot"></span>RIPv1 e RIPv2</div>
+    <div class="nav-item" onclick="nav('ospf',this)"><span class="dot"></span>OSPF</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">Teoria &amp; Prova</div>
+    <div class="nav-item" onclick="nav('teoria',this)"><span class="dot"></span>Resumo Teórico</div>
+    <div class="nav-item" onclick="nav('quiz',this)"><span class="dot"></span>Questionário</div>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+<!-- ════════════════════════════════════
+     IPv4
+════════════════════════════════════ -->
+<div id="ipv4" class="page on">
+  <div class="page-header">
+    <div class="page-tag blue">Camada de Rede</div>
+    <div class="page-title">Endereçamento IPv4</div>
+    <div class="page-desc">Estrutura, classes, público/privado, subredes e VLSM</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Estrutura do endereço</div>
+    <p class="prose">Um endereço IPv4 é composto por 4 octetos separados por pontos, onde cada octeto tem 8 bits e varia de 0 a 255 em decimal. A máscara de rede determina qual parte identifica a rede (bits "1") e qual identifica os hosts (bits "0").</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Classes de endereço</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Classe</th><th>Faixa</th><th>Máscara padrão</th><th>Uso</th></tr>
+        <tr><td><span class="tag blue">A</span></td><td>10.0.0.0 – 126.255.255.255</td><td>255.0.0.0</td><td>Redes grandes</td></tr>
+        <tr><td><span class="tag teal">B</span></td><td>128.0.0.0 – 191.255.255.255</td><td>255.255.0.0</td><td>Redes médias</td></tr>
+        <tr><td><span class="tag amber">C</span></td><td>192.0.0.0 – 223.255.255.255</td><td>255.255.255.0</td><td>Redes pequenas</td></tr>
+        <tr><td><span class="tag coral">D</span></td><td>224.0.0.0 – 239.255.255.255</td><td>—</td><td>Multicast</td></tr>
+        <tr><td><span class="tag green">E</span></td><td>240.0.0.0 – 254.255.255.255</td><td>—</td><td>Pesquisa</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="compare-card" style="border-left:3px solid #38bdf8">
+      <div class="compare-title">IP Privado (LAN)</div>
+      <div class="compare-body">Usado internamente. Pode se repetir em outras redes. Gratuito, atribuído pelo admin local. Nunca se esgota.<br><br>Faixas: 10.0.0.0/8 · 172.16.0.0/12 · 192.168.0.0/16</div>
+    </div>
+    <div class="compare-card" style="border-left:3px solid #34d399">
+      <div class="compare-title">IP Público (WAN)</div>
+      <div class="compare-body">Globalmente único. Atribuído pelo provedor (IANA → LACNIC → ISP). Tem custo e já está esgotado no IPv4.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Tipos de endereço em uma rede /24</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Tipo</th><th>Endereço</th><th>Descrição</th></tr>
+        <tr><td><span class="tag blue">Rede</span></td><td>192.168.0.0</td><td>Primeiro IP — identifica a subrede. Não pode ser atribuído a hosts.</td></tr>
+        <tr><td><span class="tag teal">Gateway</span></td><td>192.168.0.1</td><td>Convencionalmente o primeiro host válido — interface do roteador.</td></tr>
+        <tr><td><span class="tag amber">Host</span></td><td>192.168.0.2 – .254</td><td>Endereços atribuídos a dispositivos.</td></tr>
+        <tr><td><span class="tag coral">Broadcast</span></td><td>192.168.0.255</td><td>Último IP — entregue a todos os hosts da subrede. Não atribuível.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">VLSM — máscara de comprimento variável</div>
+    <p class="prose">Com VLSM cada subrede recebe exatamente o tamanho que precisa. A fórmula é <strong>2ˣ − 2 = hosts</strong> (x = bits de host). Sempre comece pela subrede maior.</p>
+    <div class="code-block">Precisa de 50 hosts → 2⁶ = 64 → 64−2 = 62 hosts → máscara /26 (255.255.255.192)</div>
+    <div class="callout info">💡 Os "1s" da máscara = rede/subrede. Os "0s" = hosts. A fórmula 2ˣ−2 desconta endereço de rede e broadcast.</div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════
+     DISPOSITIVOS
+════════════════════════════════════ -->
+<div id="dispositivos" class="page">
+  <div class="page-header">
+    <div class="page-tag teal">Camadas 1, 2 e 3</div>
+    <div class="page-title">Hub, Switch e Roteador</div>
+    <div class="page-desc">Como cada dispositivo funciona na prática e em qual camada atua</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Hub — camada 1 (física)</div>
+    <p class="prose">O hub é o dispositivo mais simples de interconexão. Ele atua na camada física e não tem inteligência alguma: qualquer sinal elétrico que chega por uma porta é copiado e enviado para <strong>todas as outras portas</strong> simultaneamente, sem exceção.</p>
+    <p class="prose">Isso significa que se PC1 e PC2 transmitirem ao mesmo tempo, os sinais se sobrepõem fisicamente — ocorre uma <strong>colisão</strong>. Ambos detectam a colisão (via CSMA/CD), param de transmitir, aguardam um tempo aleatório e retransmitem. Quanto mais dispositivos no hub, mais colisões, menos desempenho.</p>
+    <div class="callout warn">⚠️ O hub não lê endereços MAC nem IP. Ele é completamente "cego" ao conteúdo dos dados — replica tudo para todos.</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Característica</th><th>Hub</th></tr>
+        <tr><td>Camada OSI</td><td>Camada 1 — Física</td></tr>
+        <tr><td>Decisão de encaminhamento</td><td>Nenhuma — replica para todas as portas</td></tr>
+        <tr><td>Domínio de colisão</td><td>Todas as portas = 1 único domínio</td></tr>
+        <tr><td>Domínio de broadcast</td><td>Todas as portas = 1 único domínio</td></tr>
+        <tr><td>Half-duplex</td><td>Sim — só um dispositivo transmite por vez</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Switch — camada 2 (enlace)</div>
+    <p class="prose">O switch opera na camada de enlace e toma decisões com base em <strong>endereços MAC</strong>. Ele mantém internamente uma tabela chamada <strong>CAM table</strong> (Content Addressable Memory), que mapeia qual endereço MAC está em qual porta.</p>
+    <p class="prose"><strong>Como o switch aprende:</strong> quando um quadro chega pela porta 3, o switch registra "o MAC de origem está na porta 3". Na próxima vez que um quadro for destinado àquele MAC, o switch o envia diretamente para a porta 3, sem inundar as demais.</p>
+    <p class="prose"><strong>Flooding:</strong> se o switch ainda não conhece o MAC de destino, ele inunda o quadro por todas as portas (exceto a de origem) — comportamento chamado de flood. Assim que o destinatário responder, o switch aprende sua porta e para de inundar.</p>
+    <div class="callout ok">✅ Cada porta do switch é um domínio de colisão separado — dispositivos em portas diferentes não competem pelo mesmo meio. Isso elimina as colisões do modelo hub.</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Característica</th><th>Switch</th></tr>
+        <tr><td>Camada OSI</td><td>Camada 2 — Enlace</td></tr>
+        <tr><td>Decisão de encaminhamento</td><td>Baseada em endereço MAC (CAM table)</td></tr>
+        <tr><td>Domínio de colisão</td><td>1 por porta — cada porta é isolada</td></tr>
+        <tr><td>Domínio de broadcast</td><td>Todas as portas = 1 domínio (switch não bloqueia broadcast)</td></tr>
+        <tr><td>Full-duplex</td><td>Sim — pode transmitir e receber ao mesmo tempo por porta</td></tr>
+      </table>
+    </div>
+    <div class="callout warn">⚠️ O switch propaga broadcasts para todas as portas — ele não separa domínios de broadcast. Apenas roteadores (ou VLANs) fazem isso.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Roteador — camada 3 (rede)</div>
+    <p class="prose">O roteador opera na camada de rede e toma decisões com base em <strong>endereços IP</strong>. Ele interliga redes diferentes e é responsável por determinar o melhor caminho para cada pacote usando sua <strong>tabela de roteamento</strong>.</p>
+    <p class="prose"><strong>Como o roteador encaminha:</strong> ao receber um pacote, o roteador lê o IP de destino e consulta sua tabela. Se encontrar uma rota correspondente, encaminha o pacote pela interface correta. Se não encontrar, usa a rota padrão (default route) ou descarta o pacote.</p>
+    <p class="prose"><strong>O roteador é o único dispositivo que bloqueia broadcasts.</strong> Um broadcast enviado por um host não ultrapassa a interface do roteador — isso cria a fronteira entre domínios de broadcast.</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Característica</th><th>Roteador</th></tr>
+        <tr><td>Camada OSI</td><td>Camada 3 — Rede</td></tr>
+        <tr><td>Decisão de encaminhamento</td><td>Baseada em endereço IP (tabela de roteamento)</td></tr>
+        <tr><td>Domínio de colisão</td><td>Cada interface = domínio separado</td></tr>
+        <tr><td>Domínio de broadcast</td><td>Cada interface = domínio separado (bloqueia broadcasts)</td></tr>
+        <tr><td>Interliga redes</td><td>Sim — conecta redes com endereçamentos IP diferentes</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Comparativo geral</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Equipamento</th><th>Camada</th><th>Identificador</th><th>Separa colisão?</th><th>Separa broadcast?</th></tr>
+        <tr><td><span class="tag coral">Hub</span></td><td>1 — Física</td><td>Nenhum</td><td>❌ Não</td><td>❌ Não</td></tr>
+        <tr><td><span class="tag blue">Switch</span></td><td>2 — Enlace</td><td>MAC</td><td>✅ Por porta</td><td>❌ Não</td></tr>
+        <tr><td><span class="tag teal">Bridge</span></td><td>2 — Enlace</td><td>MAC</td><td>✅ Por porta</td><td>❌ Não</td></tr>
+        <tr><td><span class="tag green">Roteador</span></td><td>3 — Rede</td><td>IP</td><td>✅ Por interface</td><td>✅ Por interface</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════
+     DOMÍNIOS
+════════════════════════════════════ -->
+<div id="dominios" class="page">
+  <div class="page-header">
+    <div class="page-tag purple">Conceitos Fundamentais</div>
+    <div class="page-title">Domínios de Colisão e Broadcast</div>
+    <div class="page-desc">O que são, quais equipamentos os controlam e como contar em uma topologia</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Domínio de colisão</div>
+    <p class="prose">É o conjunto de dispositivos que compartilham o mesmo meio físico de transmissão. Se dois deles transmitirem ao mesmo tempo, seus sinais colidem — ambos são corrompidos e precisam ser reenviados.</p>
+    <p class="prose">O hub é o grande causador de domínios de colisão amplos: como ele replica o sinal para todas as portas, todos os dispositivos conectados a ele disputam o mesmo meio. Já o switch cria uma fronteira de colisão a cada porta — dispositivos em portas diferentes nunca colidem entre si.</p>
+    <div class="callout info">🔑 Regra: <strong>cada porta de switch ou roteador = 1 domínio de colisão</strong>. Todos os dispositivos num hub compartilham 1 único domínio de colisão.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Domínio de broadcast</div>
+    <p class="prose">É o conjunto de dispositivos que recebem um quadro/pacote enviado para o endereço de broadcast. No nível de enlace, o endereço de broadcast MAC é FF:FF:FF:FF:FF:FF. No nível IP, é o último endereço da subrede (ex.: 192.168.1.255).</p>
+    <p class="prose">Switches e hubs propagam broadcasts por todas as portas — eles não criam fronteiras de broadcast. Apenas o roteador (e VLANs em switches gerenciáveis) bloqueia broadcasts, criando domínios separados.</p>
+    <div class="callout warn">⚠️ Muitos dispositivos no mesmo domínio de broadcast degradam o desempenho da rede — cada broadcast consome CPU de todos os hosts no domínio.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Como contar em uma topologia — regras práticas</div>
+    <p class="prose"><strong>Para domínios de colisão:</strong> conte cada porto ativo de switch, cada porta de roteador e cada segmento de hub. Quando há um hub, todos os cabos conectados a ele (incluindo o uplink para o switch) formam 1 único domínio.</p>
+    <p class="prose"><strong>Para domínios de broadcast:</strong> conte quantas interfaces de roteador estão ativas na topologia. Cada interface delimita 1 domínio. Switches e hubs não criam separação — tudo que está do mesmo lado de um roteador pertence ao mesmo domínio de broadcast.</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Elemento na topologia</th><th>Colisão</th><th>Broadcast</th></tr>
+        <tr><td>1 Hub com 4 PCs + 1 uplink para switch</td><td>+1 (um domínio para todos)</td><td>Sem separação</td></tr>
+        <tr><td>Switch com N portas ativas</td><td>+N (uma por porta)</td><td>Sem separação</td></tr>
+        <tr><td>Link direto Switch ↔ Roteador</td><td>+1</td><td>Sem separação nesse link</td></tr>
+        <tr><td>Interface do roteador</td><td>+1 (essa interface)</td><td>+1 (cria novo domínio broadcast)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Exemplo resolvido</div>
+    <p class="prose">Topologia: Hub (com PC1, PC2, PC3) → Switch (com PC4, PC5) → Roteador → PC6</p>
+    <div class="callout info">
+      <strong>Domínios de colisão = 5</strong><br>
+      1. Hub + PC1 + PC2 + PC3 (o hub inteiro = 1 domínio)<br>
+      2. Link Hub → Switch (porta do switch)<br>
+      3. Switch → PC4 (porta do switch)<br>
+      4. Switch → PC5 (porta do switch)<br>
+      5. Switch → Roteador (porta do switch / interface do roteador)
+    </div>
+    <div class="callout ok">
+      <strong>Domínios de broadcast = 2</strong><br>
+      1. Tudo à esquerda do roteador (Hub + Switch + PC1 a PC5)<br>
+      2. A rede à direita do roteador (PC6)
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════
+     SWITCH CONFIG
+════════════════════════════════════ -->
+<div id="switch-config" class="page">
+  <div class="page-header">
+    <div class="page-tag blue">Camada de Enlace</div>
+    <div class="page-title">Configuração de Switch</div>
+    <div class="page-desc">Modos do CLI, senhas e hostname — equipamentos Cisco</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Modos do CLI Cisco</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Prompt</th><th>Modo</th><th>Acesso</th></tr>
+        <tr><td><code>Switch&gt;</code></td><td>Usuário</td><td>Acesso limitado, só leitura básica</td></tr>
+        <tr><td><code>Switch#</code></td><td>Privilegiado</td><td>Leitura completa, diagnósticos</td></tr>
+        <tr><td><code>Switch(config)#</code></td><td>Config. global</td><td>Altera qualquer parâmetro</td></tr>
+        <tr><td><code>Switch(config-if)#</code></td><td>Config. interface</td><td>Configurações de uma porta</td></tr>
+        <tr><td><code>Switch(config-line)#</code></td><td>Config. linha</td><td>Console, aux ou VTY</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Senha do modo usuário (console)</div>
+    <p class="prose">A linha console 0 protege o acesso físico direto ao equipamento (cabo serial).</p>
+    <div class="code-block">Switch(config)# line console 0<br>Switch(config-line)# password redes<br>Switch(config-line)# login</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Senha do modo privilegiado</div>
+    <p class="prose"><code>enable secret</code> armazena a senha com hash MD5 — preferível ao <code>enable password</code>, que guarda em texto claro.</p>
+    <div class="code-block">Switch&gt; enable<br>Switch# config t<br>Switch(config)# enable secret minhasenha</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Acesso remoto via Telnet (VTY)</div>
+    <p class="prose">Linhas VTY são terminais virtuais para sessões remotas. "0 4" = até 5 sessões simultâneas.</p>
+    <div class="code-block">Switch(config)# line vty 0 4<br>Switch(config-line)# password redes<br>Switch(config-line)# login<br>Switch(config-line)# transport input telnet</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Hostname e criptografia de senhas</div>
+    <div class="code-block">Switch(config)# hostname S1<br>S1(config)# service password-encryption</div>
+    <p class="prose"><code>service password-encryption</code> criptografa todas as senhas em texto claro do arquivo de configuração (tipo 7 — fraca, mas melhor que nada).</p>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════
+     ROTEADOR CONFIG
+════════════════════════════════════ -->
+<div id="router-config" class="page">
+  <div class="page-header">
+    <div class="page-tag amber">Camada de Rede</div>
+    <div class="page-title">Configuração de Roteador</div>
+    <div class="page-desc">Setup básico, interfaces e comandos de verificação</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Configuração básica — passo a passo</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><code>Router(config)# hostname R1</code> — define o nome do dispositivo.</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><code>Router(config)# enable secret senha</code> — protege o modo privilegiado com MD5.</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text">Console: <code>line console 0</code> → <code>password</code> → <code>login</code></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text">Remoto: <code>line vty 0 4</code> → <code>password</code> → <code>login</code> → <code>transport input {ssh | telnet}</code></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-text"><code>service password-encryption</code> — criptografa senhas em texto claro.</div></div>
+    <div class="step"><div class="step-num">6</div><div class="step-text"><code>banner motd # mensagem #</code> — aviso legal no login.</div></div>
+    <div class="step"><div class="step-num">7</div><div class="step-text"><code>end</code> e depois <code>copy running-config startup-config</code> — salva a configuração.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Configurar interfaces</div>
+    <div class="code-block">Router(config)# interface fa0/0<br>Router(config-if)# description Link para LAN<br>Router(config-if)# ip address 192.168.1.1 255.255.255.0<br>Router(config-if)# no shutdown</div>
+    <div class="callout warn">⚠️ Interfaces de roteador vêm <strong>administrativamente desligadas</strong> por padrão. O <code>no shutdown</code> é obrigatório para ativá-las.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Comandos de verificação</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Comando</th><th>O que exibe</th></tr>
+        <tr><td><code>show ip interface brief</code></td><td>Todas as interfaces, IPs e status (up/down)</td></tr>
+        <tr><td><code>show ip route</code></td><td>Tabela de roteamento na RAM</td></tr>
+        <tr><td><code>show interfaces</code></td><td>Estatísticas detalhadas de todas as interfaces</td></tr>
+        <tr><td><code>show ip interfaces</code></td><td>Estatísticas IPv4 por interface</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════
+     ROTEAMENTO ESTÁTICO
+════════════════════════════════════ -->
+<div id="estatico" class="page">
+  <div class="page-header">
+    <div class="page-tag teal">Roteamento</div>
+    <div class="page-title">Roteamento Estático</div>
+    <div class="page-desc">Configuração manual de rotas, sintaxe e casos de uso</div>
+  </div>
+
+  <div class="two-col">
+    <div class="compare-card" style="border-left:3px solid #34d399">
+      <div class="compare-title">Vantagens</div>
+      <div class="compare-body">Não consome CPU nem banda com atualizações. Controle total do tráfego. Mais seguro — não expõe a topologia.</div>
+    </div>
+    <div class="compare-card" style="border-left:3px solid #f87171">
+      <div class="compare-title">Desvantagens</div>
+      <div class="compare-body">Exige conhecimento da topologia completa. Qualquer mudança exige intervenção manual. Inviável em redes grandes.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Sintaxe do comando</div>
+    <div class="code-block">Router(config)# ip route [rede-destino] [máscara] [next-hop]</div>
+    <p class="prose">O <strong>next-hop</strong> é o IP da interface do próximo roteador no caminho — o endereço para onde o pacote deve ser entregue agora. Pense nele como "a próxima parada".</p>
+    <div class="code-block"><span class="cm"># Exemplo: R1 precisa alcançar 192.168.3.0/24 via R2 (cujo IP é 192.168.2.2)</span><br>R1(config)# ip route 192.168.3.0 255.255.255.0 192.168.2.2</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Leitura da tabela de roteamento</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Código</th><th>Origem da rota</th></tr>
+        <tr><td><span class="tag teal">C</span></td><td>Connected — rede diretamente conectada ao roteador</td></tr>
+        <tr><td><span class="tag blue">S</span></td><td>Static — rota configurada manualmente</td></tr>
+        <tr><td><span class="tag amber">R</span></td><td>RIP — aprendida via protocolo RIP</td></tr>
+        <tr><td><span class="tag green">O</span></td><td>OSPF — aprendida via protocolo OSPF</td></tr>
+        <tr><td><span class="tag coral">*</span></td><td>Candidata a rota padrão (default route)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Três modos de roteamento</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Modo</th><th>Como funciona</th><th>Quando usar</th></tr>
+        <tr><td><span class="tag blue">Estático</span></td><td>Admin cria rotas manualmente.</td><td>Redes pequenas e estáveis</td></tr>
+        <tr><td><span class="tag teal">Dinâmico</span></td><td>Roteadores trocam rotas via protocolo (RIP, OSPF).</td><td>Redes médias/grandes</td></tr>
+        <tr><td><span class="tag amber">Default</span></td><td>Rota de último recurso — encaminha tudo sem destino específico.</td><td>Gateway de saída para internet</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════
+     RIP
+════════════════════════════════════ -->
+<div id="rip" class="page">
+  <div class="page-header">
+    <div class="page-tag coral">Roteamento Dinâmico</div>
+    <div class="page-title">RIPv1 e RIPv2</div>
+    <div class="page-desc">Protocolo de vetor de distância — Distance Vector</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Distance Vector vs. Link-State</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Distance Vector (RIP)</th><th>Link-State (OSPF)</th></tr>
+        <tr><td>Conhece só o próximo salto</td><td>Conhece toda a topologia</td></tr>
+        <tr><td>Atualizações periódicas (30s)</td><td>Atualizações só quando há mudança</td></tr>
+        <tr><td>Maior chance de loops</td><td>Menor chance de loops</td></tr>
+        <tr><td>Convergência lenta</td><td>Convergência rápida</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="compare-card" style="border-left:3px solid #f87171">
+      <div class="compare-title">RIPv1 — Classful</div>
+      <div class="compare-body">Não envia a máscara nas atualizações — assume as máscaras padrão de classe. Incompatível com VLSM e CIDR. Usa broadcast para atualizações.</div>
+    </div>
+    <div class="compare-card" style="border-left:3px solid #34d399">
+      <div class="compare-title">RIPv2 — Classless</div>
+      <div class="compare-body">Inclui a máscara em cada rota. Suporta VLSM e CIDR. Usa multicast 224.0.0.9 — mais eficiente que broadcast.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Limitação crítica do RIP</div>
+    <p class="prose">A métrica é o número de saltos (hops), limitada a <strong>15</strong>. Uma rede a 16 saltos é declarada inacessível. Isso torna o RIP inadequado para redes grandes ou com links redundantes complexos.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Configuração RIPv2</div>
+    <div class="code-block">Router(config)# router rip<br>Router(config-router)# version 2<br>Router(config-router)# network 192.168.1.0<br>Router(config-router)# no auto-summary</div>
+    <div class="callout warn">⚠️ <code>no auto-summary</code> é essencial: sem ele o RIPv2 sumariza rotas às fronteiras de classe, quebrando o VLSM.</div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════
+     OSPF
+════════════════════════════════════ -->
+<div id="ospf" class="page">
+  <div class="page-header">
+    <div class="page-tag green">Roteamento Dinâmico</div>
+    <div class="page-title">Protocolo OSPF</div>
+    <div class="page-desc">Link-State, algoritmo Dijkstra, áreas e wildcard</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">O que é o OSPF?</div>
+    <p class="prose">OSPF (Open Shortest Path First) é um protocolo link-state criado para superar as limitações do RIP. Usa o algoritmo de <strong>Dijkstra (SPF)</strong> e a métrica <strong>custo</strong> (derivada da largura de banda). Suporta VLSM, CIDR, convergência rápida e estrutura hierárquica por áreas.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Como o OSPF funciona</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Descoberta de vizinhos</strong> — envia Hello packets pela rede.</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Formação de adjacências</strong> — roteadores que se enxergam formam vizinhança.</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Troca de LSAs</strong> (Link-State Advertisements) — cada roteador anuncia suas conexões.</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text"><strong>Construção da LSDB</strong> — banco de dados com a topologia completa da rede.</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-text"><strong>Algoritmo SPF</strong> — Dijkstra calcula o menor caminho até cada destino.</div></div>
+    <div class="step"><div class="step-num">6</div><div class="step-text"><strong>Tabela de roteamento</strong> — melhores rotas são instaladas e usadas.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Máscara wildcard</div>
+    <p class="prose">É o inverso da máscara: bit 0 = "deve combinar"; bit 1 = "não importa". Cálculo: <strong>255.255.255.255 − máscara = wildcard</strong>.</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>CIDR</th><th>Máscara</th><th>Wildcard</th></tr>
+        <tr><td>/24</td><td>255.255.255.0</td><td>0.0.0.255</td></tr>
+        <tr><td>/25</td><td>255.255.255.128</td><td>0.0.0.127</td></tr>
+        <tr><td>/26</td><td>255.255.255.192</td><td>0.0.0.63</td></tr>
+        <tr><td>/27</td><td>255.255.255.224</td><td>0.0.0.31</td></tr>
+        <tr><td>/30</td><td>255.255.255.252</td><td>0.0.0.3</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Configuração OSPF</div>
+    <div class="code-block">router(config)# router ospf 1<br>router(config-router)# router-id 1.1.1.1<br>router(config-router)# network 192.168.0.0 0.0.0.255 area 0</div>
+    <p class="prose"><strong>router ospf 1</strong> — cria o processo OSPF local. <strong>router-id</strong> — ID único no domínio. <strong>network + wildcard</strong> — anuncia a rede. <strong>area 0</strong> — backbone obrigatório.</p>
+  </div>
+
+  <div class="two-col">
+    <div class="compare-card" style="border-left:3px solid #38bdf8">
+      <div class="compare-title">Single Area</div>
+      <div class="compare-body">Todos na Área 0. Mesma LSDB. Simples de configurar. Indicado para redes pequenas/médias ou laboratório.</div>
+    </div>
+    <div class="compare-card" style="border-left:3px solid #34d399">
+      <div class="compare-title">Multiárea</div>
+      <div class="compare-body">Rede dividida em áreas. Cada área tem sua LSDB. Comunicação via ABR (Area Border Router) conectado à Área 0.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Comandos de verificação OSPF</div>
+    <div class="code-block">show ip ospf neighbor   <span class="cm">→ tabela de vizinhos</span><br>show ip ospf database   <span class="cm">→ LSDB (topologia)</span><br>show ip route           <span class="cm">→ tabela de roteamento</span></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════
+     TEORIA
+════════════════════════════════════ -->
+<div id="teoria" class="page">
+  <div class="page-header">
+    <div class="page-tag purple">Revisão</div>
+    <div class="page-title">Resumo Teórico</div>
+    <div class="page-desc">Textos corridos para leitura antes da prova</div>
+  </div>
+
+  <p class="sh">Endereçamento IPv4</p>
+  <div class="card">
+    <div class="card-title">O que é e para que serve</div>
+    <p class="prose">O IPv4 é o protocolo responsável por identificar de forma lógica cada dispositivo em uma rede IP. Diferente do endereço MAC (físico, gravado no hardware), o endereço IP é atribuído por software e pode mudar. Ele opera na camada de rede, onde os dados trafegam na forma de pacotes.</p>
+    <p class="prose">Um endereço IPv4 tem 32 bits organizados em quatro octetos decimais separados por ponto. A máscara acompanha sempre o IP: bits "1" representam a rede, bits "0" representam os hosts. A escassez levou à criação dos IPs privados (RFC 1918) — reutilizáveis em redes internas sem conflito global, dependendo de NAT para acessar a internet.</p>
+    <p class="prose">O VLSM surgiu para resolver o desperdício do modelo classful. Em vez de usar a mesma máscara para todas as subredes, ele permite dimensionar cada subrede para o número exato de hosts. A fórmula 2ˣ − 2 determina quantos hosts cabem com x bits de host — sempre começando pela subrede maior.</p>
+  </div>
+
+  <hr class="div">
+  <p class="sh">Hub, Switch e Roteador</p>
+  <div class="card">
+    <div class="card-title">Diferenças fundamentais</div>
+    <p class="prose">O hub opera na camada física e não tem inteligência: copia o sinal elétrico para todas as portas, criando um único domínio de colisão. Todos os dispositivos conectados a ele disputam o mesmo meio, o que gera colisões conforme mais dispositivos transmitem simultaneamente.</p>
+    <p class="prose">O switch opera na camada de enlace e aprende quais MACs estão em quais portas através da CAM table. Ao contrário do hub, ele entrega os quadros somente ao destino correto, criando um domínio de colisão por porta. Porém, o switch ainda propaga broadcasts para todas as portas — ele não cria fronteiras de broadcast.</p>
+    <p class="prose">O roteador opera na camada de rede e toma decisões baseadas em endereços IP. É o único equipamento convencional que bloqueia broadcasts, criando fronteiras entre domínios de broadcast. Cada interface de roteador define uma rede lógica separada, com seu próprio espaço de endereçamento.</p>
+  </div>
+
+  <hr class="div">
+  <p class="sh">Domínios de Colisão e Broadcast</p>
+  <div class="card">
+    <div class="card-title">Conceito e impacto</div>
+    <p class="prose">Um domínio de colisão é o conjunto de dispositivos que compartilham o mesmo meio físico — se dois transmitem ao mesmo tempo, colidem. Hubs criam domínios grandes; switches os segmentam por porta. Um domínio de broadcast é o conjunto de dispositivos que recebem um pacote de broadcast — switches não os separam, mas roteadores sim. Domínios de broadcast muito grandes degradam a performance pois cada broadcast consome CPU de todos os hosts presentes.</p>
+  </div>
+
+  <hr class="div">
+  <p class="sh">Roteamento</p>
+  <div class="card">
+    <div class="card-title">Estático, RIP e OSPF</div>
+    <p class="prose">No roteamento estático o administrador insere manualmente cada rota. Isso garante controle total e não gera tráfego de controle na rede, mas é rígido — qualquer mudança exige intervenção manual. Adequado para redes pequenas e estáveis.</p>
+    <p class="prose">O RIP é um protocolo de vetor de distância: cada roteador conhece só seus vizinhos e a distância em saltos. Envia sua tabela completa a cada 30 segundos, tem limite de 15 saltos e converge lentamente. O RIPv1 é classful (incompatível com VLSM); o RIPv2 é classless e usa multicast.</p>
+    <p class="prose">O OSPF é um protocolo link-state: cada roteador constrói um mapa completo da rede via LSAs, executa o algoritmo de Dijkstra e determina o menor caminho por conta própria. Envia atualizações apenas quando há mudança, converge rapidamente e suporta estrutura hierárquica por áreas. A wildcard usada na configuração é o complemento da máscara — 255.255.255.255 menos a máscara convencional.</p>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════
+     QUIZ
+════════════════════════════════════ -->
+<div id="quiz" class="page">
+  <div class="page-header">
+    <div class="page-tag amber">Avaliação</div>
+    <div class="page-title">Questionário</div>
+    <div class="page-desc">18 questões teóricas e práticas com gabarito comentado</div>
+  </div>
+
+  <div class="score-bar" id="score-bar" style="display:none">
+    <div class="metric"><div class="metric-label">Acertos</div><div class="metric-val" id="sc-ok">0</div></div>
+    <div class="metric"><div class="metric-label">Erros</div><div class="metric-val" id="sc-err">0</div></div>
+    <div class="metric"><div class="metric-label">Respondidas</div><div class="metric-val" id="sc-tot">0</div></div>
+  </div>
+
+  <!-- BLOCO 1 -->
+  <div class="q-block">
+    <div class="q-block-label"><span class="pill blue">Teórica</span> IPv4 e endereçamento</div>
+
+    <div class="q-item" data-ans="b">
+      <div class="q-num">Questão 1</div>
+      <div class="q-text">Qual é a principal diferença entre um endereço IP e um endereço MAC em termos de funcionamento na rede?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q1" value="a"> O MAC opera na camada de rede e o IP na camada de enlace.</label>
+        <label><input type="radio" name="q1" value="b"> O IP é lógico e configurável por software; o MAC é físico e gravado no hardware.</label>
+        <label><input type="radio" name="q1" value="c"> Ambos identificam o mesmo dispositivo, mas o IP é usado só em redes locais.</label>
+        <label><input type="radio" name="q1" value="d"> O MAC pode ser roteado entre redes; o IP não.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa B. O IP opera na camada de rede (3) e é atribuído por software. O MAC opera na camada de enlace (2) e é gravado no hardware. Essa separação é o que permite o roteamento entre redes distintas.</div>
+    </div>
+
+    <div class="q-item" data-ans="c">
+      <div class="q-num">Questão 2</div>
+      <div class="q-text">Em uma rede 192.168.10.0/24, quais são o endereço de rede, o broadcast e a quantidade de hosts utilizáveis?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q2" value="a"> Rede: .1 · Broadcast: .254 · Hosts: 252</label>
+        <label><input type="radio" name="q2" value="b"> Rede: .0 · Broadcast: .255 · Hosts: 256</label>
+        <label><input type="radio" name="q2" value="c"> Rede: .0 · Broadcast: .255 · Hosts: 254</label>
+        <label><input type="radio" name="q2" value="d"> Rede: .0 · Broadcast: .254 · Hosts: 253</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa C. Rede = primeiro IP (.0), broadcast = último (.255). Hosts = 256 − 2 = 254.</div>
+    </div>
+
+    <div class="q-item" data-ans="d">
+      <div class="q-num">Questão 3</div>
+      <div class="q-text">Qual a principal vantagem do VLSM em relação ao modelo de subredes com máscara fixa?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q3" value="a"> O VLSM elimina a necessidade de máscara de subrede.</label>
+        <label><input type="radio" name="q3" value="b"> O VLSM permite usar só endereços da classe A.</label>
+        <label><input type="radio" name="q3" value="c"> O VLSM aumenta automaticamente o número de endereços disponíveis.</label>
+        <label><input type="radio" name="q3" value="d"> O VLSM ajusta o tamanho de cada subrede à real necessidade de hosts, evitando desperdício.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa D. Com máscara fixa, uma subrede de 3 hosts recebe o mesmo espaço que uma de 100, desperdiçando endereços. O VLSM usa 2ˣ − 2 ≥ hosts para dimensionar cada subrede exatamente.</div>
+    </div>
+  </div>
+
+  <!-- BLOCO 2 -->
+  <div class="q-block">
+    <div class="q-block-label"><span class="pill teal">Teórica</span> Hub, Switch e Domínios</div>
+
+    <div class="q-item" data-ans="b">
+      <div class="q-num">Questão 4</div>
+      <div class="q-text">Por que um hub aumenta as colisões conforme mais dispositivos são conectados?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q4" value="a"> Porque o hub limita a velocidade de cada porta conforme a carga aumenta.</label>
+        <label><input type="radio" name="q4" value="b"> Porque todos os dispositivos compartilham o mesmo meio físico — se dois transmitem ao mesmo tempo, os sinais colidem.</label>
+        <label><input type="radio" name="q4" value="c"> Porque o hub não possui tabela de endereços e repete pacotes duplicados.</label>
+        <label><input type="radio" name="q4" value="d"> Porque o hub opera em full-duplex, gerando conflitos de timing.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa B. O hub não tem inteligência — copia o sinal elétrico para todas as portas. Todos os dispositivos disputam o mesmo meio. Quanto mais dispositivos, maior a probabilidade de dois transmitirem simultaneamente e colidirem.</div>
+    </div>
+
+    <div class="q-item" data-ans="a">
+      <div class="q-num">Questão 5</div>
+      <div class="q-text">O switch resolve o problema de colisões do hub, mas ainda não separa domínios de broadcast. Por quê?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q5" value="a"> O switch encaminha quadros de broadcast para todas as portas, assim como faz com quadros de destino desconhecido (flood), pois opera na camada 2 sem noção de redes lógicas.</label>
+        <label><input type="radio" name="q5" value="b"> O switch bloqueia broadcasts para economizar largura de banda nas portas de menor velocidade.</label>
+        <label><input type="radio" name="q5" value="c"> O switch encaminha broadcasts apenas para a porta com o menor número, por padrão.</label>
+        <label><input type="radio" name="q5" value="d"> O switch separa broadcasts por VLAN automaticamente, sem necessidade de configuração.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa A. O switch opera na camada 2 e toma decisões baseadas em MACs — ele não tem noção de redes IP. Um endereço de broadcast MAC (FF:FF:FF:FF:FF:FF) é inundado por todas as portas porque não está na CAM table. Apenas o roteador (camada 3) sabe o que é uma rede lógica e bloqueia broadcasts.</div>
+    </div>
+
+    <div class="q-item" data-ans="c">
+      <div class="q-num">Questão 6</div>
+      <div class="q-text">Em uma topologia com 1 hub (conectado a 3 PCs) ligado a um switch (com mais 2 PCs e uma interface para o roteador), quantos domínios de colisão existem?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q6" value="a"> 3 domínios de colisão.</label>
+        <label><input type="radio" name="q6" value="b"> 6 domínios de colisão.</label>
+        <label><input type="radio" name="q6" value="c"> 4 domínios de colisão.</label>
+        <label><input type="radio" name="q6" value="d"> 1 domínio de colisão.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa C. O hub (com 3 PCs) = 1 domínio. Link hub→switch = 1 domínio (porta do switch). Switch→PC4 = 1 domínio. Switch→PC5 = 1 domínio. Total = 4. O link switch→roteador seria o 5º se contado, mas neste enunciado o roteador é apenas a interface de saída do switch — conta como a porta do switch para o roteador = domínio 4 ou 5, dependendo de como a topologia for interpretada. A resposta correta pelo enunciado exato é 4 (hub, uplink hub-sw, sw-pc4, sw-pc5) considerando que sw-roteador não foi listado separadamente.</div>
+    </div>
+
+    <div class="q-item" data-ans="d">
+      <div class="q-num">Questão 7</div>
+      <div class="q-text">O que é a CAM table de um switch e como ela é populada?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q7" value="a"> É uma tabela de rotas IP configurada manualmente pelo administrador.</label>
+        <label><input type="radio" name="q7" value="b"> É uma tabela de VLANs que mapeia redes lógicas a interfaces físicas.</label>
+        <label><input type="radio" name="q7" value="c"> É um banco de dados de senhas que controla o acesso às portas do switch.</label>
+        <label><input type="radio" name="q7" value="d"> É a tabela de endereços MAC que mapeia qual MAC está em qual porta, populada dinamicamente ao observar o endereço de origem de cada quadro recebido.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa D. Quando um quadro chega em uma porta, o switch registra o MAC de origem daquele quadro associado àquela porta. Na próxima transmissão para aquele MAC, o switch não precisa fazer flood — entrega diretamente pela porta correta.</div>
+    </div>
+  </div>
+
+  <!-- BLOCO 3 -->
+  <div class="q-block">
+    <div class="q-block-label"><span class="pill amber">Teórica</span> Protocolos de roteamento</div>
+
+    <div class="q-item" data-ans="c">
+      <div class="q-num">Questão 8</div>
+      <div class="q-text">Por que o comando <code>enable secret</code> é preferível ao <code>enable password</code>?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q8" value="a"> Porque exige autenticação de dois fatores.</label>
+        <label><input type="radio" name="q8" value="b"> Porque permite senhas mais longas.</label>
+        <label><input type="radio" name="q8" value="c"> Porque armazena a senha com hash MD5, enquanto o <code>enable password</code> pode ficar em texto claro.</label>
+        <label><input type="radio" name="q8" value="d"> Não há diferença — ambos armazenam da mesma forma.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa C. O <code>enable secret</code> usa MD5 automaticamente. O <code>enable password</code> armazena em texto claro por padrão — visível com <code>show running-config</code> — a menos que <code>service password-encryption</code> seja ativado, que usa criptografia fraca (tipo 7).</div>
+    </div>
+
+    <div class="q-item" data-ans="d">
+      <div class="q-num">Questão 9</div>
+      <div class="q-text">Qual é a diferença fundamental entre os paradigmas Distance Vector e Link-State?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q9" value="a"> Distance Vector é mais seguro; Link-State é mais rápido, mas vulnerável.</label>
+        <label><input type="radio" name="q9" value="b"> Distance Vector usa Dijkstra; Link-State usa Bellman-Ford.</label>
+        <label><input type="radio" name="q9" value="c"> Ambos constroem a mesma tabela topológica, mas com métricas diferentes.</label>
+        <label><input type="radio" name="q9" value="d"> Distance Vector enxerga só o próximo salto; Link-State constrói um mapa completo e calcula o menor caminho independentemente.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa D. No Distance Vector (RIP) cada roteador confia nas distâncias que os vizinhos informam — sem visão global. No Link-State (OSPF) cada roteador tem o mapa completo e executa Dijkstra por conta própria, resultando em convergência mais rápida e menor risco de loops.</div>
+    </div>
+
+    <div class="q-item" data-ans="a">
+      <div class="q-num">Questão 10</div>
+      <div class="q-text">Qual é o papel da Área 0 no OSPF e o que acontece se uma área não estiver conectada a ela?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q10" value="a"> É o backbone obrigatório; toda troca inter-área passa por ela. Áreas sem conexão ficam isoladas.</label>
+        <label><input type="radio" name="q10" value="b"> É opcional — serve só para organização administrativa.</label>
+        <label><input type="radio" name="q10" value="c"> Armazena a LSDB global e as demais áreas a consultam remotamente.</label>
+        <label><input type="radio" name="q10" value="d"> Qualquer área pode assumir o papel de backbone se a Área 0 cair.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa A. A Área 0 é o núcleo obrigatório do OSPF multiárea. Todo tráfego inter-área transita por ela via ABR (Area Border Router). Sem conexão ao backbone, a área fica isolada e não troca rotas com as demais.</div>
+    </div>
+
+    <div class="q-item" data-ans="c">
+      <div class="q-num">Questão 11</div>
+      <div class="q-text">O que torna o RIPv1 incompatível com VLSM?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q11" value="a"> Limite de 8 saltos — insuficiente para redes com VLSM.</label>
+        <label><input type="radio" name="q11" value="b"> Usa TCP para atualizações, o que impede incluir a máscara.</label>
+        <label><input type="radio" name="q11" value="c"> É classful — não inclui a máscara nas atualizações, assumindo as padrões de classe.</label>
+        <label><input type="radio" name="q11" value="d"> RIPv1 e RIPv2 são igualmente compatíveis com VLSM.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa C. Classful = assume máscara padrão da classe. Se a rede usa /26 (fora do padrão /24 da classe C), o RIPv1 propaga como /24 — rota errada. O RIPv2 carrega a máscara em cada entrada.</div>
+    </div>
+  </div>
+
+  <!-- BLOCO 4 -->
+  <div class="q-block">
+    <div class="q-block-label"><span class="pill coral">Prática</span> Comandos e cenários</div>
+
+    <div class="q-item" data-ans="c">
+      <div class="q-num">Questão 12</div>
+      <div class="q-text">Um admin executa <code>show ip route</code> e vê "C" ao lado de algumas redes. O que isso significa?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q12" value="a"> Rotas aprendidas via OSPF na Área 0 (Core).</label>
+        <label><input type="radio" name="q12" value="b"> Rotas configuradas estaticamente com <code>ip route</code>.</label>
+        <label><input type="radio" name="q12" value="c"> Redes diretamente conectadas às interfaces ativas do roteador.</label>
+        <label><input type="radio" name="q12" value="d"> Rotas candidatas ainda não instaladas.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa C. "C" = Connected. O roteador aprende essas rotas automaticamente quando a interface é configurada com IP e ativada com <code>no shutdown</code>. S = estática, O = OSPF, R = RIP.</div>
+    </div>
+
+    <div class="q-item" data-ans="d">
+      <div class="q-num">Questão 13</div>
+      <div class="q-text">Ao configurar OSPF com <code>network 10.0.0.0 0.255.255.255 area 0</code>, o que a wildcard 0.255.255.255 significa?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q13" value="a"> Apenas o endereço exato 10.0.0.0 será incluído.</label>
+        <label><input type="radio" name="q13" value="b"> Todos os endereços de qualquer classe serão incluídos.</label>
+        <label><input type="radio" name="q13" value="c"> Somente interfaces com máscara /8 serão anunciadas.</label>
+        <label><input type="radio" name="q13" value="d"> Qualquer interface cujo IP comece com 10 (independente dos demais octetos) será incluída na Área 0.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa D. Wildcard 0.255.255.255: primeiro octeto = 0 (deve ser exatamente "10"), demais octetos = 255 (não importa). Abrange 10.0.0.0 até 10.255.255.255.</div>
+    </div>
+
+    <div class="q-item" data-ans="a">
+      <div class="q-num">Questão 14</div>
+      <div class="q-text">Em qual situação o roteamento estático é mais adequado que o OSPF?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q14" value="a"> Em uma rede com dois roteadores e topologia fixa, onde o overhead de um protocolo dinâmico não se justifica.</label>
+        <label><input type="radio" name="q14" value="b"> Em uma empresa com 50 filiais e links que mudam frequentemente.</label>
+        <label><input type="radio" name="q14" value="c"> Sempre que a rede tiver mais de 10 roteadores.</label>
+        <label><input type="radio" name="q14" value="d"> Quando a equipe de TI for pequena e não puder monitorar a rede.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa A. Roteamento estático é ideal para redes simples e estáveis. Com dois roteadores e poucas redes, configurar rotas manualmente é trivial. Em redes maiores ou dinâmicas, o estático torna-se um gargalo administrativo.</div>
+    </div>
+
+    <div class="q-item" data-ans="b">
+      <div class="q-num">Questão 15</div>
+      <div class="q-text">O que acontece se o <code>no auto-summary</code> for omitido no RIPv2?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q15" value="a"> O RIPv2 para de enviar atualizações.</label>
+        <label><input type="radio" name="q15" value="b"> O RIPv2 sumariza rotas nas fronteiras de classe, podendo anunciar redes incorretas e quebrar o VLSM.</label>
+        <label><input type="radio" name="q15" value="c"> O RIPv2 passa a usar broadcast em vez de multicast.</label>
+        <label><input type="radio" name="q15" value="d"> Nenhum impacto — o RIPv2 ignora sumarização por padrão.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa B. Sem <code>no auto-summary</code>, o RIPv2 sumariza às fronteiras de classe: 192.168.1.0/26 e 192.168.2.0/26 viram 192.168.0.0/24, destruindo as informações de VLSM e gerando roteamento incorreto.</div>
+    </div>
+
+    <div class="q-item" data-ans="a">
+      <div class="q-num">Questão 16</div>
+      <div class="q-text">Por que interfaces de roteador Cisco vêm administrativamente desligadas por padrão?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q16" value="a"> Por segurança — evita que interfaces sem configuração passem tráfego acidentalmente.</label>
+        <label><input type="radio" name="q16" value="b"> Por limitação de hardware — o firmware só ativa após o primeiro reboot.</label>
+        <label><input type="radio" name="q16" value="c"> O IOS aguarda sincronização de clock antes de ativar interfaces.</label>
+        <label><input type="radio" name="q16" value="d"> Comportamento exclusivo de interfaces seriais.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa A. O "administratively down" é intencional: garante que a interface só opere quando o admin a configurou corretamente e a ativou com <code>no shutdown</code>. Evita loops e brechas de segurança.</div>
+    </div>
+
+    <div class="q-item" data-ans="c">
+      <div class="q-num">Questão 17</div>
+      <div class="q-text">Uma rede tem 1 switch conectando PC1, PC2, PC3 e um roteador. O roteador também conecta PC4. Quantos domínios de broadcast existem?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q17" value="a"> 1 domínio de broadcast.</label>
+        <label><input type="radio" name="q17" value="b"> 4 domínios de broadcast.</label>
+        <label><input type="radio" name="q17" value="c"> 2 domínios de broadcast.</label>
+        <label><input type="radio" name="q17" value="d"> 3 domínios de broadcast.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa C. O roteador tem 2 interfaces ativas: uma para o switch (onde estão PC1, PC2, PC3) e outra para PC4. Cada interface de roteador delimita 1 domínio de broadcast → 2 domínios no total.</div>
+    </div>
+
+    <div class="q-item" data-ans="b">
+      <div class="q-num">Questão 18</div>
+      <div class="q-text">O que o switch faz quando recebe um quadro cujo MAC de destino não está na CAM table?</div>
+      <div class="q-opts">
+        <label><input type="radio" name="q18" value="a"> Descarta o quadro e envia uma mensagem de erro ao remetente.</label>
+        <label><input type="radio" name="q18" value="b"> Faz flooding — envia o quadro por todas as portas exceto a de origem, aguardando que o destino responda para aprender sua localização.</label>
+        <label><input type="radio" name="q18" value="c"> Encaminha o quadro para o roteador para que ele decida o destino.</label>
+        <label><input type="radio" name="q18" value="d"> Aguarda 30 segundos e tenta novamente antes de descartar.</label>
+      </div>
+      <button class="reveal-btn" onclick="reveal(this)">Ver resposta</button>
+      <div class="answer">Alternativa B. Quando o MAC de destino é desconhecido, o switch faz flood — envia por todas as portas exceto a de origem. Quando o destinatário responder, o switch aprende sua porta e atualiza a CAM table, parando de fazer flood para aquele MAC.</div>
+    </div>
+  </div>
+
+</div><!-- /quiz -->
+
+</main>
+</div><!-- /app -->
+
+<script>
+function nav(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('on');
+  el.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function reveal(btn) {
+  var ans = btn.nextElementSibling;
+  var item = btn.closest('.q-item');
+  var correct = item.getAttribute('data-ans');
+  var chosen = item.querySelector('input[type=radio]:checked');
+
+  if (ans.classList.contains('show')) {
+    ans.classList.remove('show', 'correct', 'wrong', 'neutral');
+    btn.textContent = 'Ver resposta';
+    return;
+  }
+
+  ans.classList.add('show');
+  btn.textContent = 'Ocultar resposta';
+
+  if (chosen) {
+    ans.classList.add(chosen.value === correct ? 'correct' : 'wrong');
+  } else {
+    ans.classList.add('neutral');
+  }
+  updateScore();
+}
+
+function updateScore() {
+  var items = document.querySelectorAll('.q-item');
+  var ok = 0, err = 0, tot = 0;
+  items.forEach(function(item) {
+    var ans = item.querySelector('.answer');
+    if (!ans.classList.contains('show')) return;
+    tot++;
+    var chosen = item.querySelector('input[type=radio]:checked');
+    if (!chosen) return;
+    if (chosen.value === item.getAttribute('data-ans')) ok++; else err++;
+  });
+  document.getElementById('sc-ok').textContent = ok;
+  document.getElementById('sc-err').textContent = err;
+  document.getElementById('sc-tot').textContent = tot;
+  document.getElementById('score-bar').style.display = 'flex';
+}
+</script>
+</body>
+</html>
